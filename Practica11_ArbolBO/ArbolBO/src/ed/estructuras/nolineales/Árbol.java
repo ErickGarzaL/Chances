@@ -13,20 +13,22 @@ import java.util.List;
  * @author veronica
  */
 public interface Árbol<E> extends Collection<E> {
-    
+
     Nodo<E> getRaíz();
     Iterator<E> getIteradorPreorden();
     Iterator<E> getIteradorPostorden();
-    
+
     /**
-     * Devuelve una lista con los datos en este árbol, según son visitados en un
-     * recorrido postorden.
-     * @return 
+     * Devuelve una lista con los datos en este árbol, según son
+     * visitados en un recorrido postorden.
+     * @return devueve una lista con los datos almacenados en los
+     * nodos de este árbol.
      */
     List<E> recorridoPostorden();
-    
+
     /**
-     * Devuelve el altura del árbol.  Si el árbol es vacío devuelve -1.
+     * Devuelve el altura del árbol.  Si el árbol es vacío devuelve
+     * -1.
      * @return altura del árbol.
      */
     int getAltura();

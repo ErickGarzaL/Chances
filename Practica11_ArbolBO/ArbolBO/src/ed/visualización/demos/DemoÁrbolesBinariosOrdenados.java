@@ -6,6 +6,7 @@
 package ed.visualización.demos;
 
 import ed.estructuras.nolineales.ÁrbolBinarioOrdenado;
+import ed.estructuras.nolineales.ÁrbolBOLigado;
 import ed.visualización.dibujantes.DibujanteDeÁrbolBinarioOrdenado;
 
 /**
@@ -16,7 +17,8 @@ public class DemoÁrbolesBinariosOrdenados extends Demo {
     private DibujanteDeÁrbolBinarioOrdenado dibujante;
 	
     private ÁrbolBinarioOrdenado<String> creaÁrbol() {
-        return new ÁrbolAVL<>();
+	    //return new ÁrbolAVL<>();
+	    return new ÁrbolBOLigado<>();
     }
     
     @DemoMethod(name = "Árbol vacío")

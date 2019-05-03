@@ -10,18 +10,18 @@ package ed.estructuras.nolineales;
  * @param <C> Tipo de los datos almacenado en este árbol, debe poderse definir
  * una relación de orden entre ellos.
  */
-public interface ÁrbolBinarioOrdenado<C extends Comparable<C>> extends ÁrbolBinario<C>{
+public interface ÁrbolBinarioOrdenado<C extends Comparable<C>> extends ÁrbolBinario<C> {
     /** Sobreescribir los iteradores para que implementen remove. */
-    
+
     /**
      * Indica si el objeto comparable <code>o</code> se encuentra en este árbol.
      * La complejidad de este método es log(n) en promedio.
-     * @param o
+     * @param o el elemento a buscar en este árbol.
      * @return si el objeto se encuentra en el árbol.
      * @throws NullPointerException si <code>o</code> es <code>null</code>.
      */
     public boolean contains(C o) throws NullPointerException;
-    
+
     /**
      * Remueve el objeto comparable <code>o</code>.
      * La complejidad de este método es log(n) en promedio.
