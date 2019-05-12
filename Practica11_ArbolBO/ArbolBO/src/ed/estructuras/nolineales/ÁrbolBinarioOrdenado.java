@@ -26,7 +26,8 @@ public interface ÁrbolBinarioOrdenado<C extends Comparable<C>> extends ÁrbolBi
      * Remueve el objeto comparable <code>o</code>.
      * La complejidad de este método es log(n) en promedio.
      * @param o el objeto a remover
-     * @return si el objeto estuvo presente y lo removió
+     * @return true si el objeto estuvo presente y lo removió, false
+     * en otro caso.
      * @throws NullPointerException si <code>o</code> es <code>null</code>.
      */
     public boolean remove(C o) throws NullPointerException;

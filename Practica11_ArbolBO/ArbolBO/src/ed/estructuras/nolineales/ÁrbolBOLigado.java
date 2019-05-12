@@ -4,16 +4,27 @@ import ed.estructuras.ColeccionAbstracta;
 import java.util.Iterator;
 import java.util.List;
 
-//Duda ¿es necesario poner que c extends comparable.  Hay varias
-//dudas: ¿es necesario que extends Colecion Abstracta? porque eso ya lo hace árbol
+//Duda ¿es necesario poner que c extends comparable? porque entiendo
+//que se supone que si esta clase implementa a ÁrbolBinarioOrdenado
+//¿qué no debería pasar que al crear un ÁrbolBOLigado debería pasar
+//que *sólo* se puedan crear con genéricos C que extiendan a
+//Comparable?
+
 /**
  * Clase que implementa a un Árbol Binario Ordenado.
+ */
+/*
+ * Notas: Es necesario que ÁrbolBOLigado extienda a ColeccionAbstracta
+ * porque como implementa ÁrbolBinarioOrdenado y éste hereda de
+ * ÁrbolBinario que a su vez hereda de Árbol y éste implementa
+ * collection, significa que esta implementación de ÁrbolBOLigado debe
+ * tener implementados los métodos que exige una colección abstracta.
  */
 public class ÁrbolBOLigado<C extends Comparable <C>>
     extends ColeccionAbstracta<C> implements ÁrbolBinarioOrdenado<C> {
 
     /* La raíz del árbol. */
-    NodoBOLigado<C> raiz;
+    protected NodoBinario<C> raiz;
 
     /* La altura de este árbol está definido por la altura del nodo
      * raíz. */
@@ -30,48 +41,51 @@ public class ÁrbolBOLigado<C extends Comparable <C>>
         return true;
     }
 
-    /*
+	/**
      * Agrega un nodo en este árbol binario ordenado en su posición
      * correspondiente con el parámetro como su dato.
      */
-    protected NodoBOLigado<C> addNode(C e) {
+    protected NodoBinario<C> addNode(C e) {
         //Si tenemos un árbol vacío
         if(this.raiz == null) {
-            this.raiz = (NodoBOLigado)this.creaNodo(e, null, null, null);
+            this.raiz = this.creaNodo(e, null, null, null);
             this.tam++;
             return this.raiz;
         }
 
-        NodoBOLigado<C> transeunte = this.raiz;
+        NodoBOLigado<C> transeunte = this.getRaíz();
         NodoBOLigado<C> ultimoVisitado = transeunte;
         while(transeunte != null) {
             ultimoVisitado = transeunte;
             // e < transeunte.getElemento()
             if(transeunte.getElemento().compareTo(e) > 0) {
-                transeunte = transeunte.izq;
+	            transeunte = transeunte.getHijoI();
                 continue;
             }
 
             //Por tricotomia ya sabemos que el dato e es mayor o igual
             //al nodo donde estamos parados
-            transeunte = transeunte.der;
+            transeunte = transeunte.getHijoD();
         }
 
         //Conectamos al nuevo nodo con el último visitado y al
         //ultimosivitado con el Nodo.
-        NodoBOLigado<C> nuevo = (NodoBOLigado)this.creaNodo(e,ultimoVisitado,null,null);
+        NodoBinario<C> nuevo = this.creaNodo(e, ultimoVisitado, null, null);
         this.tam++;
         return nuevo;
     }
 
-    /*
+	/**
      * Método que busca y devuelve al primer nodo que contiene al dato
      * pasado como parámetro si no existe dicho nodo, devuelve null
+     * @param dato el dato que se desea saber si existe en el árbol.
+     * @return el nodo del árbol que contiene al dato buscado, null si
+     * no existe en este árbol.
      */
-    private NodoBOLigado<C> busca(C dato) {
+    protected NodoBinario<C> busca(C dato) {
         if(this.isEmpty()) return null;
 
-        NodoBOLigado<C> transeunte = this.raiz;
+        NodoBinario<C> transeunte = this.raiz;
         while(transeunte != null) {
 
             //si ese nodo contiene al dato buscado
@@ -81,22 +95,24 @@ public class ÁrbolBOLigado<C extends Comparable <C>>
 
             //Si el dato es menor que el elemento en el nodo
             if(transeunte.getElemento().compareTo(dato) > 0) {
-                transeunte = transeunte.izq;
+	            transeunte = transeunte.getHijoI();
                 continue;
             }
 
             //Por tricotomia es mayor o igual que el elemento en
             //transeunte.
-            transeunte = transeunte.der;
+            transeunte = transeunte.getHijoD();
         }
 
         //Si no lo encontró
         return null;
     }
 
-    @Override
-    public boolean contains(C o) {
-        if(this.busca(o) != null) return true;
+	@Override
+	public boolean contains(C o) {
+		if(this.busca(o) != null) {
+			return true;
+		}
 
         return false;
     }
@@ -131,7 +147,7 @@ public class ÁrbolBOLigado<C extends Comparable <C>>
 
     @Override
     public NodoBOLigado<C> getRaíz() {
-        return this.raiz;
+	    return (NodoBOLigado<C>)this.raiz;
     }
 
     @Override
@@ -141,7 +157,8 @@ public class ÁrbolBOLigado<C extends Comparable <C>>
 
     @Override
     public Iterator<C> getIteradorPreorden() {
-        return new IteratorPreorden();
+	    //return new IteratorPreorden();
+	    return null;
     }
 
     @Override
@@ -165,9 +182,9 @@ public class ÁrbolBOLigado<C extends Comparable <C>>
 
         if(o == null) throw new NullPointerException();
 
-        NodoBOLigado<C> encontrado = this.busca(o);
+        NodoBinario<C> encontrado = this.busca(o);
 
-        //si este árbol no contenía al elemento _o_
+        //si este árbol no contenía al elemento *o*
         if(encontrado == null) return false;
 
         //Si es hoja y es la raíz del árbol (ie. árbol con un sólo
@@ -179,17 +196,21 @@ public class ÁrbolBOLigado<C extends Comparable <C>>
         }
 
         //Si no es la raíz o no es hoja
-        encontrado.remove();
+        NodoBOLigado<C> aux = (NodoBOLigado<C>)encontrado;
+        aux.remove();
         this.tam--;
         return true;
     }
 
+	/*
+	 * Clase interna que recorre al árbol en un recorrido inOrden.
+	 */
     protected class IteratorInOrden implements Iterator<C> {
         /* Nodo que nos indicará dónde estamos parados. */
-        private NodoBOLigado<C> actual;
+        private NodoBinario<C> actual;
 
         public IteratorInOrden() {
-            actual = ÁrbolBOLigado.this.raiz.pequenito();
+	        actual = ÁrbolBOLigado.this.getRaíz().pequenito();
         }
 
         @Override
@@ -212,54 +233,14 @@ public class ÁrbolBOLigado<C extends Comparable <C>>
                 NodoBOLigado<C> aux = (NodoBOLigado)actual.getHijoD();
                 actual = aux.pequenito();
             } else {
-                NodoBOLigado<C> temp = actual;
-                actual = (NodoBOLigado)actual.getPadre();
+	            NodoBinario<C> temp = actual;
+                actual = actual.getPadre();
 
                 while(actual != null && actual.getHijoD() == temp) {
                     temp = actual;
-                    NodoBOLigado<C> aux2 = (NodoBOLigado)actual.getPadre();
-                    actual = aux2;
-                }
-            }
-            return dato;
-        }
-    }
-
-    protected class IteratorPreorden implements Iterator<C> {
-        /* Nodo que nos indicará dónde estamos parados. */
-        private NodoBOLigado<C> actual;
-
-        public IteratorPreorden() {
-            actual = ÁrbolBOLigado.this.raiz.pequenito();
-        }
-
-        @Override
-        public boolean hasNext() {
-            return actual != null;
-        }
-
-        public C next() {
-            if(!this.hasNext()) {
-                throw new IllegalStateException("No hay elemento siguiente");
-            }
-
-            C dato = actual.getElemento();
-
-            //Si todavía no terminamos de recorrer su subárbol
-            //derecho.
-            /*Nota: getHijoD lo implementa de NodoBinario por eso es
-             * necesario hacer el cast.*/
-            if(actual.getHijoD() != null) {
-                NodoBOLigado<C> aux = (NodoBOLigado)actual.getHijoD();
-                actual = aux.pequenito();
-            } else {
-                NodoBOLigado<C> temp = actual;
-                actual = (NodoBOLigado)actual.getPadre();
-
-                while(actual != null && actual.getHijoD() == temp) {
-                    temp = actual;
-                    NodoBOLigado<C> aux2 = (NodoBOLigado)actual.getPadre();
-                    actual = aux2;
+                    //NodoBOLigado<C> aux2 = (NodoBOLigado)actual.getPadre();
+                    //actual = aux2;
+                    actual = actual.getPadre();
                 }
             }
             return dato;

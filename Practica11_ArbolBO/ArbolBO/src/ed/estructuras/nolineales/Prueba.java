@@ -74,9 +74,9 @@ public class Prueba {
 	//System.out.println(it.next());
 	//}
 	System.out.println("pequenito, es hoja");
-	System.out.println(arbol.raiz.pequenito());
+	//	System.out.println(arbol.raiz.pequenito());
 	System.out.println("Vamos a eliminar a -1");
-	System.out.println(arbol.raiz.pequenito().remueveHoja());
+	//System.out.println(arbol.raiz.pequenito().remueveHoja());
 		Iterator<Integer> it = arbol.getIteradorInorden();
 		while(it.hasNext()) {
 			System.out.println(it.next());

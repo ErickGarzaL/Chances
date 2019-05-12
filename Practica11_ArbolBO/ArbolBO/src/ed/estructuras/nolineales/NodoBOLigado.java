@@ -8,13 +8,17 @@ import java.util.List;
  * de nodos poseen una altura y pueden o no contar con un hijo
  * izquierdo y un hijo derecho.
  */
+/*
+ * Notas sobre la implementación: Para la nueva versión se cambió al
+ * tipo del padre, hijo izquierdo e hijo derecho
+ */
 public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
 
     E elemento;
-    NodoBOLigado<E> padre;
-    NodoBOLigado<E> izq;
-    NodoBOLigado<E> der;
-    int altura;
+    protected NodoBinario<E> padre;
+    protected NodoBinario<E> izq;
+    protected NodoBinario<E> der;
+    protected int altura;
 
     /**
      * Construye un Nodo Binario Ordenado Ligado.
@@ -25,7 +29,7 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
      */
     /* Sólo podemos tener este único constructor porque es el que
      * manda a llamar el método creaNodo de ÁrbolBOLigado. */
-    public NodoBOLigado(E elemento, NodoBOLigado<E> padre, NodoBOLigado<E> izq, NodoBOLigado<E> der) {
+    public NodoBOLigado(E elemento, NodoBinario<E> padre, NodoBinario<E> izq, NodoBinario<E> der) {
         this.elemento = elemento;
         this.padre = padre;
         this.izq = izq;
@@ -36,22 +40,24 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
         if(izq != null) izq.setPadre(this);
 
         if(padre != null) {
-            //padre(elem) < elemento
-            if(padre.getElemento().compareTo(elemento) <= 0) {
-                padre.setHD(this);
+	        NodoBOLigado<E> aux = this.getPadre();
+            //Si padre(elem) < this(elemento) soy su hijo derecho
+            if(aux.getElemento().compareTo(elemento) <= 0) {
+                aux.setHD(this);
             } else {
-                padre.setHI(this);
+
+	            //Si soy su hijo izquierdo
+	            aux.setHI(this);
             }
             this.actualizaAlturas();
         }
-        //Informa que es raíz
     }
 
     /** Actualiza la altura de un nodo. */
     /* Partimos de la suposición de que las hojas tienen altura
      * cero. */
     public void actualizaAltura() {
-        if(this.der == null && this.izq == null) {
+	    if(this.esHoja()) {
             this.altura = 0;
             return;
         }
@@ -78,7 +84,7 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
         NodoBOLigado<E> transeunte = this;
         while(transeunte != null) {
             transeunte.actualizaAltura();
-            transeunte = (NodoBOLigado)transeunte.getPadre();
+            transeunte = transeunte.getPadre();
         }
     }
 
@@ -95,7 +101,7 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
      */
     /* Duda; este método quedó chistoso por la condición del ciclo
      * while. */
-    public NodoBOLigado<E> grandote() {
+    public NodoBinario<E> grandote() {
         NodoBOLigado<E> transeunte = this;
         while(transeunte != null) {
 
@@ -103,7 +109,7 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
             if(transeunte.der == null) return transeunte;
 
             //Si sí tiene hijo derecho
-            transeunte = transeunte.der;
+            transeunte = transeunte.getHijoD();
         }
 
         return null;
@@ -180,7 +186,7 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
      * @return al nodo que contiene al elemento más pequeño del
      * subárbol que cuelga de este nodo.
      */
-    public NodoBOLigado<E> pequenito() {
+    public NodoBinario<E> pequenito() {
         NodoBOLigado<E> transeunte = this;
         while(transeunte != null) {
 
@@ -188,7 +194,7 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
             if(transeunte.izq == null) return transeunte;
 
             //Si sí tiene hijo izquierdo
-            transeunte = transeunte.izq;
+            transeunte = transeunte.getHijoI();
 
         }
 
@@ -202,20 +208,20 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
     /* Si queremos eliminar a la raíz de un árbol y ésta es una hoja,
      * no se debe de mandar a llamar a este método, sino modificar la
      * referencia de la raíz del árbol a null. */
-    public NodoBOLigado<E> remove() {
+    public NodoBinario<E> remove() {
         if(this.esHoja()) {
             return this.remueveHoja();
         }
 
         //Si sí tengo hijo derecho
         if(this.der != null) {
-            NodoBOLigado<E> aux = this.der.pequenito();
+	        NodoBOLigado<E> aux = (NodoBOLigado<E>)this.getHijoD().pequenito();
             this.intercambiaDato(aux);
             return aux.remove();
         }
 
         //Si no tengo hijo derecho
-        NodoBOLigado<E> aux = this.izq.grandote();
+        NodoBOLigado<E> aux = (NodoBOLigado<E>)this.getHijoI().grandote();
         aux.intercambiaDato(this);
         return aux.remove();
     }
@@ -258,9 +264,9 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
      * Define al hijo izquierdo de este nodo.
      * @param izq el nuevo hijo de este nodo.
      */
-    public void setHI(NodoBOLigado<E> izq) {
-        this.izq = izq;
-        if(izq != null) izq.padre = this;
+    public void setHI(NodoBinario<E> izq) {
+	    this.izq = (NodoBOLigado<E>)izq;
+        //if(izq != null) izq.padre = this;
         this.actualizaAlturas();
     }
 
@@ -268,9 +274,9 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
      * Define al hijo derecho de este nodo.
      * @param der el nuevo hijo derecho de este nodo.
      */
-    public void setHD(NodoBOLigado<E> der) {
-        this.der = der;
-        if(der != null) der.padre = this;
+    public void setHD(NodoBinario<E> der) {
+        this.der = (NodoBOLigado<E>)der;
+        //if(der != null) der.padre = this;
         this.actualizaAlturas();
     }
 
@@ -309,18 +315,18 @@ public class NodoBOLigado<E extends Comparable<E>> implements NodoBinario<E> {
     }
 
     @Override
-    public NodoBinario<E> getPadre() {
-        return this.padre;
+    public NodoBOLigado<E> getPadre() {
+	    return (NodoBOLigado<E>)this.padre;
     }
 
     @Override
-    public NodoBinario<E> getHijoI() {
-        return this.izq;
+    public NodoBOLigado<E> getHijoI() {
+        return (NodoBOLigado<E>)this.izq;
     }
 
     @Override
-    public NodoBinario<E> getHijoD() {
-        return this.der;
+    public NodoBOLigado<E> getHijoD() {
+        return (NodoBOLigado<E>)this.der;
     }
 
     @Override
