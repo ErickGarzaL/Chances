@@ -1,0 +1,48 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="1920" height="300">
+<defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(0,100,255);stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad-texto" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:black;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(100,100,100);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+<line x1="960" y1="60" x2="480" y2="120" style="stroke:black;stroke-width:2" />
+<line x1="960" y1="60" x2="1440" y2="120" style="stroke:black;stroke-width:2" />
+<g transform="translate(960,60)"><circle cx="0" cy="0" r="20" stroke="black" stroke-width="3" style="fill:url(#grad1)">
+</circle>
+<text x="-7" y="7" style="fill:url(#grad-texto)" font-size="20">E</text>
+<text x="-14" y="35" style="fill:black" font-size="15">h=4</text></g>
+<line x1="480" y1="120" x2="720" y2="180" style="stroke:black;stroke-width:2" />
+<g transform="translate(480,120)"><circle cx="0" cy="0" r="20" stroke="black" stroke-width="3" style="fill:url(#grad1)">
+</circle>
+<text x="-7" y="7" style="fill:url(#grad-texto)" font-size="20">A</text>
+<text x="-14" y="35" style="fill:black" font-size="15">h=3</text></g>
+<line x1="720" y1="180" x2="600" y2="240" style="stroke:black;stroke-width:2" />
+<g transform="translate(720,180)"><circle cx="0" cy="0" r="20" stroke="black" stroke-width="3" style="fill:url(#grad1)">
+</circle>
+<text x="-7" y="7" style="fill:url(#grad-texto)" font-size="20">D</text>
+<text x="-14" y="35" style="fill:black" font-size="15">h=2</text></g>
+<line x1="600" y1="240" x2="540" y2="300" style="stroke:black;stroke-width:2" />
+<g transform="translate(600,240)"><circle cx="0" cy="0" r="20" stroke="black" stroke-width="3" style="fill:url(#grad1)">
+</circle>
+<text x="-7" y="7" style="fill:url(#grad-texto)" font-size="20">C</text>
+<text x="-14" y="35" style="fill:black" font-size="15">h=1</text></g>
+<g transform="translate(540,300)"><circle cx="0" cy="0" r="20" stroke="black" stroke-width="3" style="fill:url(#grad1)">
+</circle>
+<text x="-7" y="7" style="fill:url(#grad-texto)" font-size="20">B</text>
+<text x="-14" y="35" style="fill:black" font-size="15">h=0</text></g>
+<line x1="1440" y1="120" x2="1200" y2="180" style="stroke:black;stroke-width:2" />
+<g transform="translate(1440,120)"><circle cx="0" cy="0" r="20" stroke="black" stroke-width="3" style="fill:url(#grad1)">
+</circle>
+<text x="-7" y="7" style="fill:url(#grad-texto)" font-size="20">H</text>
+<text x="-14" y="35" style="fill:black" font-size="15">h=1</text></g>
+<g transform="translate(1200,180)"><circle cx="0" cy="0" r="20" stroke="black" stroke-width="3" style="fill:url(#grad1)">
+</circle>
+<text x="-7" y="7" style="fill:url(#grad-texto)" font-size="20">F</text>
+<text x="-14" y="35" style="fill:black" font-size="15">h=0</text></g>
+</svg>
